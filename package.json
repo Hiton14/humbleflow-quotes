@@ -13,7 +13,7 @@
     "build:storefront": "vite build",
     "build:admin": "cd admin && npm install && npm run build",
     "build:server": "tsc -p server/tsconfig.json",
-    "start": "node server/start-production.js",
+    "start": "node server/start-production.cjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview"

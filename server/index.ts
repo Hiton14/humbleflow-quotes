@@ -50,7 +50,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(process.cwd(), 'dist/public')));
 
   // SPA fallback for storefront
-  app.get('/*', (req, res) => {
+  app.get('/(.*)', (req, res) => {
     res.sendFile(path.join(process.cwd(), 'dist/public/index.html'));
   });
 }

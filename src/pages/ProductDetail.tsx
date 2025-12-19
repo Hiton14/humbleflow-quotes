@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Plus, Minus, Check } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,6 +12,8 @@ import { useCart } from '@/hooks/useCart';
 import { Product, ProductSpec } from '@/types/database';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { getImageUrl } from '@/lib/utils';
+import { companyInfo } from '@/config/company';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -23,16 +25,13 @@ export default function ProductDetail() {
   const { data: product, isLoading, error } = useQuery({
     queryKey: ['product', slug],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*, category:categories(*)')
-        .eq('slug', slug)
-        .single();
-      
-      if (error) throw error;
+      const products = await api.products.list({ slug });
+      if (products.length === 0) throw new Error('Product not found');
+
+      const data = products[0];
       return {
         ...data,
-        specs: (data.specs as unknown as ProductSpec[]) || [],
+        specs: data.specs || [],
         images: data.images || [],
         tags: data.tags || []
       } as Product;
@@ -44,17 +43,15 @@ export default function ProductDetail() {
   const { data: relatedProducts = [] } = useQuery({
     queryKey: ['related-products', product?.category_id, product?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*, category:categories(*)')
-        .eq('category_id', product!.category_id!)
-        .neq('id', product!.id)
-        .limit(4);
-      
-      if (error) throw error;
-      return (data || []).map(p => ({
+      const data = await api.products.list({
+        category_id: product?.category_id || undefined,
+        exclude_id: product?.id,
+        limit: 4
+      });
+
+      return (data || []).map((p: any) => ({
         ...p,
-        specs: (p.specs as unknown as ProductSpec[]) || [],
+        specs: p.specs || [],
         images: p.images || [],
         tags: p.tags || []
       })) as Product[];
@@ -64,17 +61,14 @@ export default function ProductDetail() {
 
   const handleAddToQuote = () => {
     if (!product) return;
-    
-    addItem({
-      productId: product.id,
-      productSlug: product.slug,
-      productTitle: product.title,
-      productImage: product.images?.[0] || null,
-      quantity,
-      selectedOptions: {},
-    });
-    
-    toast.success(`${product.title} added to quote cart`);
+
+    const message = encodeURIComponent(
+      `Hi HumbleBoss, I'm interested in: ${product.title}\nQuantity: ${quantity}\n\nLink: ${window.location.href}`
+    );
+    const whatsappUrl = `https://wa.me/${companyInfo.contact.whatsapp.replace(/\s+/g, '')}?text=${message}`;
+
+    window.open(whatsappUrl, '_blank');
+    toast.success(`Opening WhatsApp for ${product.title}`);
   };
 
   if (isLoading) {
@@ -122,8 +116,8 @@ export default function ProductDetail() {
       <div className="container py-8">
         {/* Breadcrumb */}
         <div className="mb-8">
-          <Link 
-            to="/products" 
+          <Link
+            to="/products"
             className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -137,7 +131,7 @@ export default function ProductDetail() {
           <div className="space-y-4">
             <div className="aspect-square rounded-lg overflow-hidden bg-muted">
               <img
-                src={images[selectedImage]}
+                src={getImageUrl(images[selectedImage])}
                 alt={product.title}
                 className="w-full h-full object-cover"
               />
@@ -148,12 +142,11 @@ export default function ProductDetail() {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-colors ${
-                      selectedImage === index ? 'border-primary' : 'border-transparent'
-                    }`}
+                    className={`shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-colors ${selectedImage === index ? 'border-primary' : 'border-transparent'
+                      }`}
                   >
                     <img
-                      src={image}
+                      src={getImageUrl(image)}
                       alt={`${product.title} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
@@ -166,14 +159,14 @@ export default function ProductDetail() {
           {/* Product Info */}
           <div>
             {product.category && (
-              <Link 
+              <Link
                 to={`/products?category=${product.category.id}`}
                 className="text-sm text-primary hover:underline"
               >
                 {product.category.title}
               </Link>
             )}
-            
+
             <h1 className="text-3xl font-bold text-foreground mt-2 mb-4">
               {product.title}
             </h1>

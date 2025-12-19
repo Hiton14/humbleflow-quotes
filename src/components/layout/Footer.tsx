@@ -46,8 +46,9 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-secondary-foreground/80">
               <li>RO Systems</li>
               <li>UF Systems</li>
-              <li>Water Tanks</li>
-              <li>Dialysis Equipment</li>
+              <li>Stainless steel equipments</li>
+              <li>milk processing Equipment</li>
+              <li>Water refill, milk and salad atms</li>
             </ul>
           </div>
 
@@ -57,11 +58,11 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2 text-secondary-foreground/80">
                 <Phone className="h-4 w-4" />
-                <span>+254 700 000 000</span>
+                <span>+254 728542796</span>
               </li>
               <li className="flex items-center gap-2 text-secondary-foreground/80">
                 <Mail className="h-4 w-4" />
-                <span>info@humbleboss.co.ke</span>
+                <span>humblebosstechnical@gmail.com</span>
               </li>
               <li className="flex items-center gap-2 text-secondary-foreground/80">
                 <MapPin className="h-4 w-4" />

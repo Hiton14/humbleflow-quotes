@@ -4,34 +4,32 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Product } from '@/types/database';
-import { useCart } from '@/hooks/useCart';
 import { toast } from 'sonner';
+
+import { getImageUrl } from '@/lib/utils';
+
+import { companyInfo } from '@/config/company';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCart();
-
   const handleAddToQuote = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    addItem({
-      productId: product.id,
-      productSlug: product.slug,
-      productTitle: product.title,
-      productImage: product.images?.[0] || null,
-      quantity: 1,
-      selectedOptions: {},
-    });
-    
-    toast.success(`${product.title} added to quote cart`);
+
+    const message = encodeURIComponent(
+      `Hi HumbleBoss, I'm interested in the product: ${product.title}\n\nLink: ${window.location.origin}/products/${product.slug}`
+    );
+    const whatsappUrl = `https://wa.me/${companyInfo.contact.whatsapp.replace(/\s+/g, '')}?text=${message}`;
+
+    window.open(whatsappUrl, '_blank');
+    toast.success(`Opening WhatsApp for ${product.title}`);
   };
 
   const mainSpec = product.specs?.[0];
-  const imageUrl = product.images?.[0] || '/placeholder.svg';
+  const imageUrl = getImageUrl(product.images?.[0]);
 
   return (
     <Card className="group overflow-hidden hover:shadow-lg transition-shadow">
@@ -72,9 +70,9 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardContent>
       </Link>
       <CardFooter className="p-4 pt-0 gap-2">
-        <Button 
-          variant="default" 
-          size="sm" 
+        <Button
+          variant="default"
+          size="sm"
           className="flex-1"
           onClick={handleAddToQuote}
         >

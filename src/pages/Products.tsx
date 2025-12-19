@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Search, Filter, X } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { api } from '@/lib/api';
 import { Layout } from '@/components/layout/Layout';
 import { ProductCard } from '@/components/products/ProductCard';
 import { CategoryFilter } from '@/components/products/CategoryFilter';
@@ -28,11 +28,7 @@ export default function Products() {
   const { data: categories = [] } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .order('title');
-      if (error) throw error;
+      const data = await api.categories.list();
       return data as Category[];
     },
   });
@@ -41,15 +37,10 @@ export default function Products() {
   const { data: products = [], isLoading } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*, category:categories(*)')
-        .order('is_featured', { ascending: false })
-        .order('title');
-      if (error) throw error;
-      return (data || []).map(p => ({
+      const data = await api.products.list();
+      return (data || []).map((p: any) => ({
         ...p,
-        specs: (p.specs as unknown as ProductSpec[]) || [],
+        specs: p.specs || [],
         images: p.images || [],
         tags: p.tags || []
       })) as Product[];
@@ -69,7 +60,7 @@ export default function Products() {
       // Search filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
-        const matchesSearch = 
+        const matchesSearch =
           product.title.toLowerCase().includes(query) ||
           product.short_description?.toLowerCase().includes(query) ||
           product.tags?.some(tag => tag.toLowerCase().includes(query));
@@ -92,8 +83,8 @@ export default function Products() {
   }, [products, searchQuery, selectedCategory, selectedTags]);
 
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
@@ -169,7 +160,7 @@ export default function Products() {
               className="pl-10"
             />
           </div>
-          
+
           {/* Mobile Filter Button */}
           <Sheet>
             <SheetTrigger asChild>
@@ -236,7 +227,7 @@ export default function Products() {
                 <Search className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium text-foreground mb-2">No products found</h3>
                 <p className="text-muted-foreground mb-4">
-                  {hasActiveFilters 
+                  {hasActiveFilters
                     ? "Try adjusting your filters or search query"
                     : "Products will appear here once added by an admin"
                   }

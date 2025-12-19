@@ -1,0 +1,12 @@
+"use client";
+import { AuthProvider } from '@/context/AuthContext';
+import { Toaster } from 'sonner';
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+    return (
+        <AuthProvider>
+            {children}
+            <Toaster position="top-right" />
+        </AuthProvider>
+    );
+}

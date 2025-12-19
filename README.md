@@ -50,15 +50,9 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
+# HumbleFlow Quotes App
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+This project is a quote request application for HumbleFlow.
 
 ## How can I deploy this project?
 

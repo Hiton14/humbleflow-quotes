@@ -12,7 +12,7 @@
     "build": "npm run build:storefront && npm run build:admin && npm run build:server",
     "build:storefront": "vite build",
     "build:admin": "cd admin && npm install && npm run build",
-    "build:server": "tsc -p server/tsconfig.json",
+    "build:server": "tsc -p server/tsconfig.json && echo '{\"type\": \"commonjs\"}' > dist/server/package.json",
     "start": "node server/start-production.cjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",

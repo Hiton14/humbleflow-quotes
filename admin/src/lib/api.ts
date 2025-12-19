@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000/api', // Point to the Express backend
+    baseURL: '/api', // Use relative path for production compatibility
 });
 
 api.interceptors.request.use((config) => {

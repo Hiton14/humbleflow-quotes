@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Plus, Edit, Trash } from 'lucide-react';
 import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
+import { getImageUrl } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 
@@ -63,7 +64,7 @@ export default function CategoriesPage() {
                             {category.image_url && (
                                 <div className="mb-4 aspect-video w-full overflow-hidden rounded-md bg-slate-100">
                                     <img
-                                        src={`http://localhost:3000${category.image_url}`}
+                                        src={getImageUrl(category.image_url)}
                                         alt={category.title}
                                         className="h-full w-full object-cover"
                                     />

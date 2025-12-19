@@ -21,7 +21,7 @@ export function ImageUpload({ value, onChange, onRemove }: ImageUploadProps) {
             // For simplicity in admin, standard img tag with full URL is easier.
             // API Base URL is http://localhost:3000/api. Uploads are at http://localhost:3000/uploads
             if (value.startsWith('/')) {
-                setPreview(`http://localhost:3000${value}`);
+                setPreview(value);
             } else {
                 setPreview(value);
             }

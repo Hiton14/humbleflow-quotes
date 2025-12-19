@@ -31,7 +31,7 @@ export default function LoginPage() {
         <div className="min-h-screen flex items-center justify-center bg-slate-50">
             <Card className="w-full max-w-md">
                 <CardHeader>
-                    <CardTitle className="text-center">HumbleBoss Admin Login</CardTitle>
+                    <CardTitle className="text-center text-blue-600">HumbleBoss Admin Login</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">

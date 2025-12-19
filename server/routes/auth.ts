@@ -81,4 +81,62 @@ router.post('/change-password', authenticateToken, async (req: AuthRequest, res)
     }
 });
 
+import crypto from 'crypto';
+
+// POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            // Don't reveal if user exists for security, just say "If account exists..."
+            return res.json({ message: 'If an account with that email exists, a reset link has been generated.' });
+        }
+
+        const token = crypto.randomBytes(20).toString('hex');
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
+
+        await user.save();
+
+        // LOGGING TOKEN FOR DEV/ADMIN (Since we lack email service)
+        console.log('-------------------------------------------');
+        console.log(`PASSWORD RESET REQUEST FOR: ${email}`);
+        console.log(`RESET TOKEN: ${token}`);
+        console.log(`RESET URL: ${req.headers.origin}/admin/reset-password?token=${token}`);
+        console.log('-------------------------------------------');
+
+        res.json({ message: 'If an account with that email exists, a reset link has been generated.' });
+    } catch (err) {
+        res.status(500).json({ error: (err as Error).message });
+    }
+});
+
+// POST /api/auth/reset-password
+router.post('/reset-password', async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ error: 'Password reset token is invalid or has expired.' });
+        }
+
+        user.passwordHash = await bcrypt.hash(newPassword, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        await user.save();
+
+        res.json({ message: 'Password has been reset successfully.' });
+    } catch (err) {
+        res.status(500).json({ error: (err as Error).message });
+    }
+});
+
 export default router;

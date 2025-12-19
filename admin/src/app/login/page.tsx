@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 
+import Link from 'next/link';
+
 export default function LoginPage() {
     const { login } = useAuth();
     const [email, setEmail] = useState('');
@@ -56,6 +58,11 @@ export default function LoginPage() {
                         <Button type="submit" className="w-full" disabled={loading}>
                             {loading ? 'Logging in...' : 'Login'}
                         </Button>
+                        <div className="text-center mt-4">
+                            <Link href="/admin/forgot-password" title="Forgot Password" className="text-sm text-blue-600 hover:underline">
+                                Forgot Password?
+                            </Link>
+                        </div>
                     </form>
                 </CardContent>
             </Card>

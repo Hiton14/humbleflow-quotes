@@ -34,7 +34,8 @@ if (process.env.NODE_ENV === 'production') {
     ws: true,
   }));
 
-  app.use('/_next', createProxyMiddleware({
+  app.use(createProxyMiddleware({
+    pathFilter: '/_next',
     target: 'http://localhost:3001',
     changeOrigin: true,
     ws: true,

@@ -140,9 +140,13 @@ export default function Contact() {
                                         <Mail className="h-6 w-6 text-primary mt-1" />
                                         <div>
                                             <h3 className="font-semibold mb-1">Email</h3>
-                                            <a href={`mailto:${companyInfo.contact.email}`} className="text-muted-foreground hover:text-primary">
-                                                {companyInfo.contact.email}
-                                            </a>
+                                            <div className="flex flex-col space-y-1">
+                                                {companyInfo.contact.emails.map((email, index) => (
+                                                    <a key={index} href={`mailto:${email}`} className="text-muted-foreground hover:text-primary">
+                                                        {email}
+                                                    </a>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="flex items-start space-x-4">

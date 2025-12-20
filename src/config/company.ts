@@ -5,7 +5,7 @@ export const companyInfo = {
 
     contact: {
         phone: "+254 728542796",
-        email: "humblebosstechnical@gmail.com",
+        emails: ["humblebosstechnical@gmail.com", "info@humblebosstechnical.co.ke"],
         whatsapp: "+254 728542796",
         address: "Nairobi, Kenya"
     },

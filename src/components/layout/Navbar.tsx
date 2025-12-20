@@ -90,9 +90,9 @@ export function Navbar() {
                                     <Phone className="h-4 w-4 mr-2" />
                                     {companyInfo.contact.phone}
                                 </a>
-                                <a href={`mailto:${companyInfo.contact.email}`} className="flex items-center text-sm text-muted-foreground">
+                                <a href={`mailto:${companyInfo.contact.emails[0]}`} className="flex items-center text-sm text-muted-foreground">
                                     <Mail className="h-4 w-4 mr-2" />
-                                    {companyInfo.contact.email}
+                                    {companyInfo.contact.emails[0]}
                                 </a>
                                 <a
                                     href={`https://wa.me/${companyInfo.contact.whatsapp.replace(/\s/g, '')}`}

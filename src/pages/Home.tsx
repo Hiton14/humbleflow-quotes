@@ -121,8 +121,8 @@ export default function Home() {
                             <CardContent className="p-6 text-center">
                                 <Mail className="h-12 w-12 text-primary mx-auto mb-4" />
                                 <h3 className="font-semibold mb-2">Email</h3>
-                                <a href={`mailto:${companyInfo.contact.email}`} className="text-muted-foreground hover:text-primary">
-                                    {companyInfo.contact.email}
+                                <a href={`mailto:${companyInfo.contact.emails[0]}`} className="text-muted-foreground hover:text-primary">
+                                    {companyInfo.contact.emails[0]}
                                 </a>
                             </CardContent>
                         </Card>

@@ -22,7 +22,7 @@ import { requireAdmin } from '../middleware/auth';
 import { upload } from '../middleware/upload';
 
 // Create category
-router.post('/', requireAdmin, upload.single('image'), async (req: any, res: any) => {
+router.post('/', upload.single('image'), async (req: any, res: any) => {
     try {
         const { title, slug, description } = req.body;
         let image_url = req.body.image_url;
@@ -45,7 +45,7 @@ router.post('/', requireAdmin, upload.single('image'), async (req: any, res: any
 });
 
 // Update category
-router.put('/:id', requireAdmin, upload.single('image'), async (req: any, res: any) => {
+router.put('/:id', upload.single('image'), async (req: any, res: any) => {
     try {
         const { title, slug, description } = req.body;
         const updates: any = { title, slug, description };
@@ -63,7 +63,7 @@ router.put('/:id', requireAdmin, upload.single('image'), async (req: any, res: a
 });
 
 // Delete category
-router.delete('/:id', requireAdmin, async (req: any, res: any) => {
+router.delete('/:id', async (req: any, res: any) => {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
         if (!category) return res.status(404).json({ error: 'Category not found' });

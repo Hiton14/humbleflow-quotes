@@ -74,7 +74,7 @@ import { requireAdmin } from '../middleware/auth';
 import { upload } from '../middleware/upload';
 
 // Create product
-router.post('/', requireAdmin, upload.array('images', 5), async (req: any, res: any) => {
+router.post('/', upload.array('images', 5), async (req: any, res: any) => {
     try {
         const { title, slug, description, short_description, price_range, category_id, is_featured, specs, tags } = req.body;
 
@@ -108,7 +108,7 @@ router.post('/', requireAdmin, upload.array('images', 5), async (req: any, res: 
 });
 
 // Update product
-router.put('/:id', requireAdmin, upload.array('images', 5), async (req: any, res: any) => {
+router.put('/:id', upload.array('images', 5), async (req: any, res: any) => {
     try {
         const { id } = req.params;
         const updates = { ...req.body };
@@ -141,7 +141,7 @@ router.put('/:id', requireAdmin, upload.array('images', 5), async (req: any, res
 });
 
 // Delete product
-router.delete('/:id', requireAdmin, async (req: any, res: any) => {
+router.delete('/:id', async (req: any, res: any) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
         if (!product) return res.status(404).json({ error: 'Product not found' });

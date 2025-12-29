@@ -29,14 +29,9 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'server/uploads')));
 if (process.env.NODE_ENV === 'production') {
   const { createProxyMiddleware } = require('http-proxy-middleware');
 
-  app.use('/admin', createProxyMiddleware({
-    target: 'http://localhost:3001',
-    changeOrigin: true,
-    ws: true,
-  }));
-
+  // Proxy /admin requests. using pathFilter ensures '/admin' is NOT stripped from req.url
   app.use(createProxyMiddleware({
-    pathFilter: '/_next',
+    pathFilter: ['/admin', '/_next'],
     target: 'http://localhost:3001',
     changeOrigin: true,
     ws: true,

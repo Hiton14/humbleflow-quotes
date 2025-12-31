@@ -13,7 +13,7 @@ import { Product, ProductSpec } from '@/types/database';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { getImageUrl } from '@/lib/utils';
-import { companyInfo } from '@/config/company';
+import { getWhatsAppLink } from '@/lib/whatsapp';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -62,11 +62,7 @@ export default function ProductDetail() {
   const handleAddToQuote = () => {
     if (!product) return;
 
-    const message = encodeURIComponent(
-      `Hi HumbleBoss, I'm interested in: ${product.title}\nQuantity: ${quantity}\n\nLink: ${window.location.href}`
-    );
-    const whatsappUrl = `https://wa.me/${companyInfo.contact.whatsapp.replace(/\s+/g, '')}?text=${message}`;
-
+    const whatsappUrl = getWhatsAppLink(product.title, product.id);
     window.open(whatsappUrl, '_blank');
     toast.success(`Opening WhatsApp for ${product.title}`);
   };

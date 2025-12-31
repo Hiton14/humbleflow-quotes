@@ -7,9 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
 import { Navbar } from "@/components/layout/Navbar";
 import Home from "./pages/Home";
-import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
-import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,9 +23,7 @@ const App = () => (
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
               <Route path="/products/:slug" element={<ProductDetail />} />
-              <Route path="/contact" element={<Contact />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

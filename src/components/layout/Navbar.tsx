@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Phone, Mail, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -7,39 +7,66 @@ import { companyInfo } from '@/config/company';
 export function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const navLinks = [
-        { name: 'Home', path: '/' },
-        { name: 'Products', path: '/products' },
-        { name: 'Contact', path: '/contact' },
+        { name: 'Home', path: '/#hero' },
+        { name: 'Services', path: '/#services' },
+        { name: 'Products', path: '/#products' },
+        { name: 'Contact', path: '/#contact' },
     ];
 
-    const isActive = (path: string) => location.pathname === path;
+    const isActive = (path: string) => {
+        if (path === '/#hero' && location.pathname === '/' && !location.hash) return true;
+        return location.hash === path.substring(1);
+    };
+
+    const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+        e.preventDefault();
+        setMobileMenuOpen(false);
+
+        const [pathname, hash] = path.split('#');
+
+        if (location.pathname !== pathname) {
+            navigate(path);
+            return;
+        }
+
+        const element = document.getElementById(hash);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            // Update URL hash without scroll jump
+            window.history.pushState(null, '', path);
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
 
     return (
         <nav className="sticky top-0 z-50 bg-white border-b shadow-sm">
             <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
-                    <Link to="/" className="flex items-center">
+                    <a href="/" onClick={(e) => handleNavClick(e, '/#hero')} className="flex items-center">
                         <img
                             src="/logo.png"
                             alt="HumbleBoss Technical Services"
                             className="h-28 w-auto"
                         />
-                    </Link>
+                    </a>
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-8">
                         {navLinks.map((link) => (
-                            <Link
+                            <a
                                 key={link.path}
-                                to={link.path}
+                                href={link.path}
+                                onClick={(e) => handleNavClick(e, link.path)}
                                 className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.path) ? 'text-primary' : 'text-muted-foreground'
                                     }`}
                             >
                                 {link.name}
-                            </Link>
+                            </a>
                         ))}
                     </div>
 
@@ -75,15 +102,15 @@ export function Navbar() {
                     <div className="md:hidden py-4 border-t">
                         <div className="flex flex-col space-y-4">
                             {navLinks.map((link) => (
-                                <Link
+                                <a
                                     key={link.path}
-                                    to={link.path}
-                                    onClick={() => setMobileMenuOpen(false)}
+                                    href={link.path}
+                                    onClick={(e) => handleNavClick(e, link.path)}
                                     className={`text-sm font-medium ${isActive(link.path) ? 'text-primary' : 'text-muted-foreground'
                                         }`}
                                 >
                                     {link.name}
-                                </Link>
+                                </a>
                             ))}
                             <div className="pt-4 border-t space-y-2">
                                 <a href={`tel:${companyInfo.contact.phone}`} className="flex items-center text-sm text-muted-foreground">

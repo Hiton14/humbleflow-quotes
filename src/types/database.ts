@@ -4,8 +4,8 @@ export interface Category {
   slug: string;
   description: string | null;
   image_url: string | null;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface ProductSpec {
@@ -25,8 +25,8 @@ export interface Product {
   price_range: string | null;
   tags: string[];
   is_featured: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   category?: Category;
 }
 

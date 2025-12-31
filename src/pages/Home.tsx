@@ -9,11 +9,11 @@ import { Product } from '@/types/database';
 import { companyInfo } from '@/config/company';
 
 export default function Home() {
-    // Fetch featured products
+    // Fetch ALL products for the single page layout
     const { data: products = [] } = useQuery({
-        queryKey: ['featured-products'],
+        queryKey: ['all-products'],
         queryFn: async () => {
-            const data = await api.products.list({ limit: 6 });
+            const data = await api.products.list(); // No limit
             return (data || []).map((p: any) => ({
                 ...p,
                 specs: p.specs || [],
@@ -23,12 +23,10 @@ export default function Home() {
         },
     });
 
-    const featuredProducts = products.filter(p => p.is_featured).slice(0, 6);
-
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-primary/10 via-background to-primary/5 py-20">
+            <section id="hero" className="bg-gradient-to-br from-primary/10 via-background to-primary/5 py-20">
                 <div className="container mx-auto px-4">
                     <div className="max-w-4xl mx-auto text-center">
                         <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
@@ -38,17 +36,17 @@ export default function Home() {
                             {companyInfo.description}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link to="/products">
+                            <a href="#products">
                                 <Button size="lg" className="w-full sm:w-auto">
                                     View Products
                                     <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
-                            </Link>
-                            <Link to="/contact">
+                            </a>
+                            <a href="#contact">
                                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
                                     Request Quote
                                 </Button>
-                            </Link>
+                            </a>
                             <a
                                 href={`https://wa.me/${companyInfo.contact.whatsapp.replace(/\s/g, '')}`}
                                 target="_blank"
@@ -65,7 +63,7 @@ export default function Home() {
             </section>
 
             {/* Services Section */}
-            <section className="py-16 bg-background">
+            <section id="services" className="py-16 bg-background">
                 <div className="container mx-auto px-4">
                     <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -81,30 +79,29 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Featured Products */}
-            {featuredProducts.length > 0 && (
-                <section className="py-16 bg-muted/30">
-                    <div className="container mx-auto px-4">
-                        <div className="flex justify-between items-center mb-12">
-                            <h2 className="text-3xl font-bold">Featured Products</h2>
-                            <Link to="/products">
-                                <Button variant="outline">
-                                    View All
-                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
-                            </Link>
-                        </div>
+            {/* All Products Section */}
+            <section id="products" className="py-16 bg-muted/30">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl font-bold mb-4">Our Products</h2>
+                        <p className="text-muted-foreground">Browse our complete extensive catalog</p>
+                    </div>
+                    {products.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {featuredProducts.map((product) => (
+                            {products.map((product) => (
                                 <ProductCard key={product.id} product={product} />
                             ))}
                         </div>
-                    </div>
-                </section>
-            )}
+                    ) : (
+                        <div className="text-center py-12">
+                            <p className="text-muted-foreground">No products found.</p>
+                        </div>
+                    )}
+                </div>
+            </section>
 
             {/* Contact Section */}
-            <section className="py-16 bg-background">
+            <section id="contact" className="py-16 bg-background">
                 <div className="container mx-auto px-4">
                     <h2 className="text-3xl font-bold text-center mb-12">Get In Touch</h2>
                     <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -133,14 +130,6 @@ export default function Home() {
                                 <p className="text-muted-foreground">{companyInfo.contact.address}</p>
                             </CardContent>
                         </Card>
-                    </div>
-                    <div className="text-center mt-8">
-                        <Link to="/contact">
-                            <Button size="lg">
-                                Contact Us
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Button>
-                        </Link>
                     </div>
                 </div>
             </section>

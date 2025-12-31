@@ -1,29 +1,43 @@
-const API_URL = '/api';
+import { PRODUCTS, CATEGORIES, Product, Category } from './data';
 
 export const api = {
     products: {
         list: async (params?: { slug?: string, category_id?: string, exclude_id?: string, limit?: number }) => {
-            const searchParams = new URLSearchParams();
-            if (params?.slug) searchParams.append('slug', params.slug);
-            if (params?.category_id) searchParams.append('category_id', params.category_id);
-            if (params?.exclude_id) searchParams.append('exclude_id', params.exclude_id);
-            if (params?.limit) searchParams.append('limit', params.limit.toString());
+            let filtered = [...PRODUCTS];
 
-            const response = await fetch(`${API_URL}/products?${searchParams.toString()}`);
-            if (!response.ok) throw new Error('Failed to fetch products');
-            return response.json();
+            if (params?.slug) {
+                filtered = filtered.filter(p => p.slug === params.slug);
+            }
+            if (params?.category_id) {
+                filtered = filtered.filter(p => p.category_id === params.category_id);
+            }
+            if (params?.exclude_id) {
+                filtered = filtered.filter(p => p.id !== params.exclude_id);
+            }
+
+            // Map category data into the product to match expected frontend structure (populate)
+            const populated = filtered.map(p => {
+                const category = CATEGORIES.find(c => c.id === p.category_id);
+                return { ...p, category };
+            });
+
+            if (params?.limit) {
+                return populated.slice(0, params.limit);
+            }
+
+            return populated;
         },
         get: async (id: string) => {
-            const response = await fetch(`${API_URL}/products/${id}`);
-            if (!response.ok) throw new Error('Failed to fetch product');
-            return response.json();
+            const product = PRODUCTS.find(p => p.id === id || p.slug === id);
+            if (!product) throw new Error('Product not found');
+
+            const category = CATEGORIES.find(c => c.id === product.category_id);
+            return { ...product, category };
         }
     },
     categories: {
         list: async () => {
-            const response = await fetch(`${API_URL}/categories`);
-            if (!response.ok) throw new Error('Failed to fetch categories');
-            return response.json();
+            return CATEGORIES;
         }
     }
 };

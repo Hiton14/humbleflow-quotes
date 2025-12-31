@@ -14,16 +14,14 @@ interface ProductCardProps {
   product: Product;
 }
 
+import { getWhatsAppLink } from '@/lib/whatsapp';
+
 export function ProductCard({ product }: ProductCardProps) {
   const handleAddToQuote = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const message = encodeURIComponent(
-      `Hi HumbleBoss, I'm interested in the product: ${product.title}\n\nLink: ${window.location.origin}/products/${product.slug}`
-    );
-    const whatsappUrl = `https://wa.me/${companyInfo.contact.whatsapp.replace(/\s+/g, '')}?text=${message}`;
-
+    const whatsappUrl = getWhatsAppLink(product.title, product.id);
     window.open(whatsappUrl, '_blank');
     toast.success(`Opening WhatsApp for ${product.title}`);
   };

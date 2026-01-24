@@ -12,13 +12,16 @@ export function Navbar() {
     const navLinks = [
         { name: 'Home', path: '/#hero' },
         { name: 'Services', path: '/#services' },
-        { name: 'Products', path: '/#products' },
+        { name: 'Products', path: '/products' },
         { name: 'Contact', path: '/#contact' },
     ];
 
     const isActive = (path: string) => {
         if (path === '/#hero' && location.pathname === '/' && !location.hash) return true;
-        return location.hash === path.substring(1);
+        if (path.includes('#')) {
+            return location.hash === path.substring(1);
+        }
+        return location.pathname === path;
     };
 
     const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {

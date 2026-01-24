@@ -18,7 +18,8 @@ export const companyInfo = {
         "Milk processing Equipment",
         "Water refill, milk and salad atms",
         "Kitchen Equipment",
-        "Medical stainless steel products"
+        "Medical stainless steel products",
+        "Accessories"
     ],
 
     social: {

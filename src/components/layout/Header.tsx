@@ -16,7 +16,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <Droplets className="h-8 w-8 text-primary" />
+          <img src="/logo.png" alt="HumbleBoss" className="h-10 w-auto" />
           <span className="font-bold text-lg text-foreground hidden sm:inline">
             Humbleboss
           </span>
@@ -43,8 +43,8 @@ export function Header() {
             <Button variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
               {itemCount > 0 && (
-                <Badge 
-                  variant="destructive" 
+                <Badge
+                  variant="destructive"
                   className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
                 >
                   {itemCount}
@@ -62,19 +62,12 @@ export function Header() {
                 Sign Out
               </Button>
             </div>
-          ) : (
-            <Link to="/auth" className="hidden md:block">
-              <Button variant="default" size="sm">
-                <User className="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
-            </Link>
-          )}
+          ) : null}
 
           {/* Mobile Menu Toggle */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
@@ -86,23 +79,23 @@ export function Header() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t bg-card p-4 space-y-3">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="block py-2 text-foreground hover:text-primary"
             onClick={() => setMobileMenuOpen(false)}
           >
             Home
           </Link>
-          <Link 
-            to="/products" 
+          <Link
+            to="/products"
             className="block py-2 text-foreground hover:text-primary"
             onClick={() => setMobileMenuOpen(false)}
           >
             Products
           </Link>
           {isStaff && (
-            <Link 
-              to="/admin" 
+            <Link
+              to="/admin"
               className="block py-2 text-foreground hover:text-primary"
               onClick={() => setMobileMenuOpen(false)}
             >

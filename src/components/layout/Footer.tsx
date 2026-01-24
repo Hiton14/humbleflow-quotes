@@ -10,7 +10,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Droplets className="h-6 w-6 text-primary" />
+              <img src="/logo.png" alt={COMPANY_INFO.name} className="h-8 w-auto" />
               <span className="font-bold">{COMPANY_INFO.name}</span>
             </div>
             <p className="text-sm text-secondary-foreground/80">

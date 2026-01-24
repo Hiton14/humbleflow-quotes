@@ -7,6 +7,9 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { Product } from '@/types/database';
 import { companyInfo } from '@/config/company';
+import { CATEGORIES } from '@/lib/data';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
 export default function Home() {
     // Fetch ALL products for the single page layout
@@ -25,38 +28,88 @@ export default function Home() {
 
     return (
         <div className="min-h-screen">
-            {/* Hero Section */}
-            <section id="hero" className="bg-gradient-to-br from-primary/10 via-background to-primary/5 py-20">
-                <div className="container mx-auto px-4">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-                            {companyInfo.tagline}
-                        </h1>
-                        <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                            {companyInfo.description}
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a href="#products">
-                                <Button size="lg" className="w-full sm:w-auto">
-                                    View Products
-                                    <ArrowRight className="ml-2 h-5 w-5" />
-                                </Button>
-                            </a>
-                            <a href="#contact">
-                                <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                                    Request Quote
-                                </Button>
-                            </a>
-                            <a
-                                href={`https://wa.me/${companyInfo.contact.whatsapp.replace(/\s/g, '')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <Button size="lg" className="w-full sm:w-auto bg-green-600 hover:bg-green-700">
-                                    <MessageCircle className="mr-2 h-5 w-5" />
-                                    WhatsApp
-                                </Button>
-                            </a>
+            {/* Hero Section with Carousel Background */}
+            <section id="hero" className="relative overflow-hidden h-[600px]">
+                {/* Background Images Carousel */}
+                <Carousel
+                    opts={{
+                        align: "start",
+                        loop: true,
+                    }}
+                    plugins={[
+                        Autoplay({
+                            delay: 4000,
+                        })
+                    ]}
+                    className="absolute inset-0"
+                >
+                    <CarouselContent>
+                        <CarouselItem>
+                            <div className="relative h-[600px]">
+                                <div className="absolute inset-0 bg-black/50 z-10" />
+                                <img
+                                    src="/milk factory.jpeg"
+                                    alt="Milk Factory"
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                />
+                            </div>
+                        </CarouselItem>
+                        <CarouselItem>
+                            <div className="relative h-[600px]">
+                                <div className="absolute inset-0 bg-black/50 z-10" />
+                                <img
+                                    src="/Water Refilling Station Purification System.jpeg"
+                                    alt="Water Refilling Station"
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                />
+                            </div>
+                        </CarouselItem>
+                        <CarouselItem>
+                            <div className="relative h-[600px]">
+                                <div className="absolute inset-0 bg-black/50 z-10" />
+                                <img
+                                    src="/welding.jpeg"
+                                    alt="Welding Services"
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                />
+                            </div>
+                        </CarouselItem>
+                    </CarouselContent>
+                </Carousel>
+
+                {/* Static Text Content Overlay */}
+                <div className="absolute inset-0 z-20 flex items-center justify-center">
+                    <div className="container mx-auto px-4">
+                        <div className="max-w-4xl mx-auto text-center text-white">
+                            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                                {companyInfo.tagline}
+                            </h1>
+                            <p className="text-xl mb-8 max-w-2xl mx-auto">
+                                {companyInfo.description}
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="#products">
+                                    <Button size="lg" className="w-full sm:w-auto">
+                                        View Products
+                                        <ArrowRight className="ml-2 h-5 w-5" />
+                                    </Button>
+                                </a>
+                                <a href="#contact">
+                                    <Button size="lg" variant="outline" className="w-full sm:w-auto bg-white/10 text-white border-white hover:bg-white/20">
+                                        Request Quote
+                                    </Button>
+                                </a>
+                                <a
+                                    href={`https://wa.me/${companyInfo.contact.whatsapp.replace(/\s/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Button size="lg" className="w-full sm:w-auto bg-green-600 hover:bg-green-700">
+                                        <MessageCircle className="mr-2 h-5 w-5" />
+                                        WhatsApp
+                                    </Button>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,26 +132,34 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* All Products Section */}
-            <section id="products" className="py-16 bg-muted/30">
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold mb-4">Our Products</h2>
-                        <p className="text-muted-foreground">Browse our complete extensive catalog</p>
-                    </div>
-                    {products.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {products.map((product) => (
-                                <ProductCard key={product.id} product={product} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-12">
-                            <p className="text-muted-foreground">No products found.</p>
-                        </div>
-                    )}
-                </div>
-            </section>
+            {/* Products by Category Sections */}
+            <div id="products">
+                {CATEGORIES.map((category) => {
+                    const categoryProducts = products.filter(p => p.category_id === category.id);
+                    if (categoryProducts.length === 0) return null;
+
+                    return (
+                        <section key={category.id} className="py-16 even:bg-muted/30 odd:bg-background">
+                            <div className="container mx-auto px-4">
+                                <div className="text-center mb-12">
+                                    <Link to={`/products?category=${category.id}`} className="inline-block hover:opacity-80 transition-opacity">
+                                        <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-2">
+                                            {category.title}
+                                            <ArrowRight className="h-6 w-6 text-primary" />
+                                        </h2>
+                                    </Link>
+                                    <p className="text-muted-foreground">{category.description}</p>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {categoryProducts.map((product) => (
+                                        <ProductCard key={product.id} product={product} />
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+                    );
+                })}
+            </div>
 
             {/* Contact Section */}
             <section id="contact" className="py-16 bg-background">

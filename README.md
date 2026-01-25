@@ -40,7 +40,7 @@ A modern, professional website showcasing industrial water treatment equipment, 
 git clone <YOUR_GIT_URL>
 
 # Navigate to project directory
-cd humbleflow-quotes
+cd humblebosstechnical
 
 # Install dependencies
 npm install
@@ -155,4 +155,3 @@ For technical support, contact [your-email@example.com]
 
 ---
 
-Built with ❤️ for HumbleBoss Technical Services

@@ -6,8 +6,13 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getImageUrl(path: string | null | undefined) {
-  if (!path) return '/placeholder.svg';
+  if (!path) return `${import.meta.env.BASE_URL}placeholder.svg`.replace(/\/+/g, '/');
   if (path.startsWith('http')) return path;
-  // Use relative path for production compatibility
-  return `${path.startsWith('/') ? '' : '/'}${path}`;
+
+  // Make sure the path doesn't have a leading slash so we don't get //
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+
+  // Combine BASE_URL and path, ensuring exactly one slash between them
+  const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+  return `${base}${cleanPath}`;
 }

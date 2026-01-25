@@ -10,6 +10,7 @@ import { companyInfo } from '@/config/company';
 import { CATEGORIES } from '@/lib/data';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
+import { getImageUrl } from '@/lib/utils';
 
 export default function Home() {
     // Fetch ALL products for the single page layout
@@ -48,7 +49,7 @@ export default function Home() {
                             <div className="relative h-[600px]">
                                 <div className="absolute inset-0 bg-black/50 z-10" />
                                 <img
-                                    src="/milk factory.jpeg"
+                                    src={getImageUrl("milk factory.jpeg")}
                                     alt="Milk Factory"
                                     className="absolute inset-0 w-full h-full object-cover"
                                 />
@@ -58,7 +59,7 @@ export default function Home() {
                             <div className="relative h-[600px]">
                                 <div className="absolute inset-0 bg-black/50 z-10" />
                                 <img
-                                    src="/Water Refilling Station Purification System.jpeg"
+                                    src={getImageUrl("Water Refilling Station Purification System.jpeg")}
                                     alt="Water Refilling Station"
                                     className="absolute inset-0 w-full h-full object-cover"
                                 />
@@ -68,7 +69,7 @@ export default function Home() {
                             <div className="relative h-[600px]">
                                 <div className="absolute inset-0 bg-black/50 z-10" />
                                 <img
-                                    src="/welding.jpeg"
+                                    src={getImageUrl("welding.jpeg")}
                                     alt="Welding Services"
                                     className="absolute inset-0 w-full h-full object-cover"
                                 />
@@ -148,7 +149,25 @@ export default function Home() {
                                             <ArrowRight className="h-6 w-6 text-primary" />
                                         </h2>
                                     </Link>
-                                    <p className="text-muted-foreground">{category.description}</p>
+                                    <p className="text-muted-foreground mb-8">{category.description}</p>
+
+                                    {category.image_url && (
+                                        <div className="max-w-4xl mx-auto mb-12 rounded-xl overflow-hidden shadow-xl aspect-video bg-muted">
+                                            {category.image_url.endsWith('.mp4') ? (
+                                                <video
+                                                    src={getImageUrl(category.image_url)}
+                                                    controls
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={getImageUrl(category.image_url)}
+                                                    alt={category.title}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {categoryProducts.map((product) => (

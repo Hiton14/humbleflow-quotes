@@ -3,6 +3,7 @@ import { Menu, X, Phone, Mail, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { companyInfo } from '@/config/company';
+import { getImageUrl } from '@/lib/utils';
 
 export function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -52,7 +53,7 @@ export function Navbar() {
                     {/* Logo */}
                     <a href="/" onClick={(e) => handleNavClick(e, '/#hero')} className="flex items-center">
                         <img
-                            src="/logo.png"
+                            src={getImageUrl("logo.png")}
                             alt="HumbleBoss Technical Services"
                             className="h-28 w-auto"
                         />
